@@ -5,7 +5,7 @@ Terminal
 1. Use the Windows Explorer to navigate to the folder where you are storing the project files.
 2. Right-click anywhere within the folder (not on a file) and choose "Open in Terminal".
 
-Essential commands to know (all should have "git" preceding it):
+All commands should have "git" preceding it.
 - "status" tells you the current status of your files compared to files in the git repo. It will tell you if you have added, deleted, or modified any files since the last time you synced your local repo with the git repo.
 - "fetch" will check if the git repo has changed since your last sync, but does NOT sync your repo
 - "pull" will apply any changes made to the git repo to your repo (NOT the other way around)
@@ -13,7 +13,16 @@ Essential commands to know (all should have "git" preceding it):
 	- I won't bore you with the details about branches, but it is good practice when working with multiple people to create your own branch before making changes to your repo
 	- "branch [name]" will create a new branch with the name that you give it
 	- "checkout [name]" will switch you to the branch of your choosing (assuming it exists)
-	- "branch -d [name]" will delete the chosen branch, I don't think you'll really ever have to do this though
+	- "branch -d [name]" will delete the chosen branch (NEVER delete main)
 - "add [files]" will stage files that you have added, deleted, or modified - this means to prepare the files for uploading to the git repo
 - "commit -m [message]" will take prepared files from the previous command and actually get ready to upload them (not sure why there are two steps here), and associates a message with the commit, which should describe what you did (the message should be within quotation marks)
-- "push"
+- "push" will actually upload files you have added and committed to the git repo
+	- Make sure you do add, commit, and push while on your personal branch, NOT on the main branch
+	- The first time you do this with a new branch, git will say to run another command about setting upstream. Just copy, paste, and run this command and you should be good for future pushes.
+	- Once you have pushed, you'll need to go to the GitHub page and a message will show up at the top with a button saying "Compare & pull request", click that. Then click on the green button that says "Create pull request".
+	- Here, you could run into merge conflicts if the changes you are making conflict with changes that I have made and pushed to the repo before you. You should be able to choose which changes to keep and which to drop here. Once you have resolved all conflicts, or have no conflicts to begin with, click "Merge pull request" and "Confirm merge". Finally, click on "Delete branch".
+	- Return to the terminal, checkout the main branch, delete the branch you just came from, and pull
+
+Git GUI
+1. Use the Windows Explorer to navigate to the folder where you are storing the project files.
+2. Right-click anywhere within the folder (not on a file), choose "Show more options", and choose "Open Git GUI here".
