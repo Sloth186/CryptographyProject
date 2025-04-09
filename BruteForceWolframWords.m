@@ -113,4 +113,3 @@ VCBruteForceKey3[cipher_, showReject_:False, print_:False] := Module[
 
 cipher = VigenereCipher["St. Olaf College", "YAH"]
 VCBruteForceKey3[cipher]
-
