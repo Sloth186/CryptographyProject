@@ -1,4 +1,3 @@
-#!/usr/bin/env wolframscript
 (* ::Package:: *)
 
 VigenereCipher[from_, key_, direction_:True] := Module[
@@ -18,15 +17,3 @@ op = If[MemberQ[{True,"e",0}, direction], Plus, Subtract], i = 1, j = 1, to = {}
 	
 	FromCharacterCode[to]
 ]
-
-
-VigenereCipher["ST OLAF COLLEGE", "LION"]
-VigenereCipher["DB CYLN QBWTSTP", "LION", False]
-VigenereCipher["ST OLAF COLLEGE", "LION", True]
-VigenereCipher["ST OLAF COLLEGE", "LION", "e"]
-VigenereCipher["ST OLAF COLLEGE", "LION", 0]
-VigenereCipher["DB CYLN QBWTSTP", "LION", 1]
-VigenereCipher["DB CYLN QBWTSTP", "LION", "d"]
-
-
-
