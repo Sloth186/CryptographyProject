@@ -1,3 +1,29 @@
+Before you start doing work
+1. git checkout main
+2. git pull
+3. git checkout Jessica
+4. git pull origin main
+
+
+When you are done coding some things and want to upload them
+1. git add .
+2. git commit -m "your message here"
+3. git push
+4. click on link and click green buttons on GitHub
+5. go back to terminal
+6. git checkout main
+7. git pull
+8. git checkout Jessica
+9. git pull origin main
+
+
+
+
+
+
+
+
+
 Two ways to do git stuff: in the terminal, and with the Git user interface.
 I prefer the terminal but you may find the Git GUI to be more intuitive.
 
