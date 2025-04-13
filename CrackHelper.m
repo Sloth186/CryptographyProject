@@ -1,13 +1,19 @@
 (* ::Package:: *)
 
+(* Gutenberg URL numbers for each book *)
 books = {84, 2701, 1342, 1513, 11, 26184, 64317, 2542, 844, 100, 145, 174, 2641, 37106, 43, 11};
 
 
+(* Extracts raw text for each book from Gutenberg *)
 text = {};
 Do[
-	AppendTo[text, ToLowerCase[Import["https://www.gutenberg.org/cache/epub/" <> i <> "/pg" <> i <> ".txt"]]]
+	(* Reduces all characters to lowercase and splits the extracted text into individual words, dropping punctuation *)
+	(* Joins the resulting list to previously obtained text *)
+	text = Join[text
+		, StringSplit[
+			ToLowerCase[Import[URL["https://www.gutenberg.org/cache/epub/" <> i <> "/pg" <> i <> ".txt"]]]
+			, RegularExpression["\\W+"]]]
 , {i, ToString /@ books}]
-text = StringSplit[StringRiffle[text], RegularExpression["\\W+"]];
 numWords = Length[text];
 numChars = Plus @@ StringLength /@ text;
 
@@ -17,76 +23,69 @@ numWords
 numChars
 
 
-MonoFreq[text_, words_] := Module[
-{monofrequencies = Table[0, 26], word, char},
-	Do[
-		Do[
-			If[Between[char, {1, 26}],
-				monofrequencies[[char]] += 1]
-		, {char, word}]
-	, {word, LetterNumber[text[[1;;words]]]}];
-	
-	monofrequencies
+(* Counts the number of times each character appears across all text and sorts by said characters *)
+monoFreqAll = KeySort[Counts[Characters[StringJoin[text]]]]
+(* Obtains frequencies only for the standard 26 alphabetic letters *)
+monoFreqAlpha = KeySelect[monoFreqAll, LetterNumber[#] != 0&]
+
+
+(* Bar chart to visualize monogram frequencies *)
+BarChart[monoFreqAlpha, ChartLabels->Keys[monoFreqAlpha]]
+
+
+(* Convert each word in the text to a list of characters *)
+(* Select only the lists that have strictly more than 1 element - in other words, drop 1-letter words *)
+(* Obtain all bigrams for each word *)
+(* The above produces a list of lists, so flatten at the first level to make counting easier *)
+bigrams = Flatten[Subsequences[#, {2}]& /@ Select[Characters[text], Length[#]>1&], 1]
+
+
+(* Count the frequency of each digram *)
+biFreqAll = KeySort[Counts[bigrams]];
+(* Keep only digrams containing strictly alphabetical characters *)
+biFreqAlpha = KeySelect[biFreqAll, !MemberQ[LetterNumber[#], 0]&];
+
+
+(* Visualize the top 25 digrams *)
+top25biFreqAlpha = Sort[biFreqAlpha, Greater][[1;;25]]
+BarChart[top25biFreqAlpha, ChartLabels->StringJoin/@Keys[top25biFreqAlpha]]
+
+
+Clear[bigrams]
+
+
+trigrams = Flatten[Subsequences[#, {3}]& /@ Select[Characters[text], Length[#]>2&], 1]
+
+
+triFreqAll = KeySort[Counts[trigrams]];
+triFreqAlpha = KeySelect[triFreqAll, !MemberQ[LetterNumber[#], 0]&];
+
+
+Sort[triFreqAlpha, Greater]
+
+
+Clear[trigrams]
+
+
+tetragrams = Flatten[Subsequences[#, {4}]& /@ Select[Characters[text], Length[#]>3&], 1]
+
+
+tetraFreqAll = KeySort[Counts[tetragrams]];
+tetraFreqAlpha = KeySelect[tetraFreqAll, !MemberQ[LetterNumber[#], 0]&];
+
+
+Sort[tetraFreqAlpha, Greater]
+
+
+top25tetra = Take[Sort[tetraFreqAlpha, Greater], 25]
+BarChart[top25tetra, ChartLabels -> Placed[StringJoin /@ Keys[top25tetra], Below, Rotate[#, 60 Degree]&]]
+
+
+tetraFreq = tetraFreqAlpha;
+Do[tetraFreq[[key]] /= (numChars - 3)
+, {key, Keys[tetraFreq]}]
+
+
+Fitness[text_] := Module[{},
+	Print["Not implemented"]
 ]
-
-MonoFreq[text_] := MonoFreq[text, Length[text]]
-
-
-monofrequencies = MonoFreq[text, 10000]
-BarChart[monofrequencies, ChartLabels -> Alphabet[]]
-
-
-DiFreq[text_, words_] := Module[
-{difrequencies = Nest[Table[#, 26]&, 0, 2], word, i},
-	Do[
-		If[Length[word] > 1,
-			For[i = 1, i < Length[word], ++i,
-				If[And @@ (Between[#, {1, 26}]& /@ word[[i;;i+1]]),
-					difrequencies[[word[[i]], word[[i+1]]]] += 1
-				]
-			]
-		]
-	, {word, LetterNumber[text[[1;;words]]]}];
-	
-	difrequencies
-]
-
-
-difrequencies = DiFreq[text, 10000];
-barcharts = Table[BarChart[difrequencies[[i]], ChartLabels->Alphabet[], Frame->True, FrameLabel->{FromLetterNumber[i]}], {i, 26}]
-
-
-TetraFreq[text_, words_] := Module[
-{tetrafrequencies = Nest[Table[#,26]&,0,4], word, i, x},
-	Do[
-		If[Length[word] > 1,
-			For[i = 1, i < Length[word] - 2, ++i,
-				If[And @@ (Between[#, {1, 26}]& /@ word[[i;;i+3]]),
-					tetrafrequencies[[word[[i]], word[[i+1]], word[[i+2]], word[[i+3]]]] += 1
-				]
-			]
-		]
-	, {word, LetterNumber[text[[1;;words]]]}];
-	
-	tetrafrequencies
-]
-
-TetraFreq[text_] := TetraFreq[text, Length[text]]
-
-
-tetrafrequencies = TetraFreq[text, 1000]
-
-
-For[i = 1, i <= 10, ++i,
-	For[j = 1, j <= 10, ++j,
-		For[k = 1, k <= 10, ++k,
-			If[!AllMatch[tetrafrequencies[[i, j, k]], 0],
-				Print[StringJoin[FromLetterNumber[{i, j, k}]] <> ": " <> ToString[tetrafrequencies[[i, j, k]]]]
-			]
-		]
-	]
-]
-
-
-
-!AllMatch[tetrafrequencies[[20, 8, 5]],0]
