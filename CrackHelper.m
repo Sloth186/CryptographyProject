@@ -26,7 +26,7 @@ numChars
 (* Counts the number of times each character appears across all text and sorts by said characters *)
 monoFreqAll = KeySort[KeyMap[List, Counts[Characters[StringJoin[text]]]]]
 (* Obtains frequencies only for the standard 26 alphabetic letters *)
-monoFreqAlpha = KeySelect[monoFreqAll, LetterNumber[#] != 0&]
+monoFreqAlpha = KeySelect[monoFreqAll, !MemberQ[LetterNumber[#], 0]&]
 
 
 (* Bar chart to visualize monogram frequencies *)
