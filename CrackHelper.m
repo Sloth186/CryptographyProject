@@ -86,6 +86,13 @@ Do[tetraFreq[[key]] /= (numChars - 3)
 , {key, Keys[tetraFreq]}]
 
 
+Export["C:\\Users\\scrot\\Documents\\St. Olaf - Junior\\Cryptography\\FinalProject\\tetraFreqAlpha.txt", Compress[tetraFreqAlpha]]
+
+
+tetraFreqAlpha = Uncompress[Import["C:\\Users\\scrot\\Documents\\St. Olaf - Junior\\Cryptography\\FinalProject\\tetraFreqAlpha.txt"]]
+
+
 Fitness[text_] := Module[{},
-	Print["Not implemented"]
+	tetragrams = Uncompress[Import["C:\\Users\\scrot\\Documents\\St. Olaf - Junior\\Cryptography\\FinalProject\\tetraFreqAlpha.txt"]]
+	
 ]
