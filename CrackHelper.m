@@ -86,12 +86,12 @@ Do[tetraFreq[[key]] /= (numChars - 3)
 , {key, Keys[tetraFreq]}]
 
 
-Export["C:\\Users\\scrot\\Documents\\St. Olaf - Junior\\Cryptography\\FinalProject\\tetraFreqAlpha.txt", Compress[tetraFreqAlpha]]
+(*Export["C:\\Users\\scrot\\Documents\\St. Olaf - Junior\\Cryptography\\FinalProject\\monoFreqAlpha.txt", Compress[monoFreqAlpha]]*)
+(*Export["C:\\Users\\scrot\\Documents\\St. Olaf - Junior\\Cryptography\\FinalProject\\biFreqAlpha.txt", Compress[biFreqAlpha]]*)
+(*Export["C:\\Users\\scrot\\Documents\\St. Olaf - Junior\\Cryptography\\FinalProject\\triFreqAlpha.txt", Compress[triFreqAlpha]]*)
+(*Export["C:\\Users\\scrot\\Documents\\St. Olaf - Junior\\Cryptography\\FinalProject\\tetraFreqAlpha.txt", Compress[tetraFreqAlpha]]*)
 
 
 Fitness[text_] := Module[{},
 	tetragrams = Uncompress[Import["https://raw.githubusercontent.com/Sloth186/CryptographyProject/refs/heads/main/tetraFreqAlpha.txt"]]
 ]
-
-
-Fitness["test import"]
