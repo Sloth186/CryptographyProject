@@ -24,7 +24,7 @@ numChars
 
 
 (* Counts the number of times each character appears across all text and sorts by said characters *)
-monoFreqAll = KeySort[Counts[Characters[StringJoin[text]]]]
+monoFreqAll = KeySort[KeyMap[List, Counts[Characters[StringJoin[text]]]]]
 (* Obtains frequencies only for the standard 26 alphabetic letters *)
 monoFreqAlpha = KeySelect[monoFreqAll, LetterNumber[#] != 0&]
 
@@ -93,5 +93,17 @@ Do[tetraFreq[[key]] /= (numChars - 3)
 
 
 Fitness[text_] := Module[{},
-	tetragrams = Uncompress[Import["https://raw.githubusercontent.com/Sloth186/CryptographyProject/refs/heads/main/tetraFreqAlpha.txt"]]
+	Print["Not implemented"]
 ]
+
+
+mono = Uncompress[Import["https://raw.githubusercontent.com/Sloth186/CryptographyProject/refs/heads/main/monoFreqAlpha.txt"]]
+bi = Uncompress[Import["https://raw.githubusercontent.com/Sloth186/CryptographyProject/refs/heads/main/biFreqAlpha.txt"]]
+tri = Uncompress[Import["https://raw.githubusercontent.com/Sloth186/CryptographyProject/refs/heads/main/triFreqAlpha.txt"]]
+tetra = Uncompress[Import["https://raw.githubusercontent.com/Sloth186/CryptographyProject/refs/heads/main/tetraFreqAlpha.txt"]]
+
+
+fourgrams = AssociateTo[tetra, AssociateTo[tri, AssociateTo[bi, mono]]]
+
+
+fourgrams["a"]
