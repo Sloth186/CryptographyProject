@@ -102,3 +102,19 @@ fourgrams = Sort[AssociateTo[tetra, AssociateTo[tri, AssociateTo[bi, mono]]], Gr
 
 (* For fun - visualize top 50 -grams *)
 BarChart[Take[fourgrams, 50], ChartLabels->StringJoin/@Take[Keys[fourgrams], 50], Frame->True, FrameLabel->{"Top 50 fourgrams"}]
+
+
+Fitness[text_, freq_] := Module[
+{T = Flatten[If[Length[#] < 4, {#}, Subsequences[#, {4}]]& /@ Characters[StringSplit[ToLowerCase[text], RegularExpression["\\W+"]]], 1]
+, result = 0, i},
+	Do[
+		If[freq[i] == 0,
+			result -= 15,
+			result += Log[freq[i]]]
+	, {i, T}];
+	(result / Length[T]) // N
+]
+
+
+text = "There's no time to waste, in this famous goodbye. There's angels landing on the shore, so lay down with me. Let the river run dry, it's Sunday in this six day war. Smile darling, don't be sad. Stars are going to shine tonight, tell me where the good men go, before I wash away. Walk me down the old brick road, so I can die where I met you. Hold me like we're going home, turn your tears to rain. Bury me beautiful. Heaven knows, how I loved you.";
+Fitness[text, fourgrams]
