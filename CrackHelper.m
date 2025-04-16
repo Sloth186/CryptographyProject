@@ -82,21 +82,23 @@ top25tetra = Take[Sort[tetraFreqAlpha, Greater], 25]
 BarChart[top25tetra, ChartLabels -> Placed[StringJoin /@ Keys[top25tetra], Below, Rotate[#, 60 Degree]&]]
 
 
-Export["C:\\Users\\scrot\\Documents\\St. Olaf - Junior\\Cryptography\\FinalProject\\monoFreqAlpha.txt", Compress[monoFreqAlpha]]
-Export["C:\\Users\\scrot\\Documents\\St. Olaf - Junior\\Cryptography\\FinalProject\\biFreqAlpha.txt", Compress[biFreqAlpha]]
-Export["C:\\Users\\scrot\\Documents\\St. Olaf - Junior\\Cryptography\\FinalProject\\triFreqAlpha.txt", Compress[triFreqAlpha]]
-Export["C:\\Users\\scrot\\Documents\\St. Olaf - Junior\\Cryptography\\FinalProject\\tetraFreqAlpha.txt", Compress[tetraFreqAlpha]]
+(* Compress the monograms, bigrams, trigrams, and tetragrams and export as plaintext *)
+Export[FileNameJoin[NotebookDirectory[], "monoFreqAlpha.txt"], Compress[monoFreqAlpha]];
+Export[FileNameJoin[NotebookDirectory[], "biFreqAlpha.txt"], Compress[biFreqAlpha]];
+Export[FileNameJoin[NotebookDirectory[], "triFreqAlpha.txt"], Compress[triFreqAlpha]];
+Export[FileNameJoin[NotebookDirectory[], "tetraFreqAlpha.txt"], Compress[tetraFreqAlpha]];
 
 
-Fitness[text_] := Module[{},
-	Print["Not implemented"]
-]
-
-
+(* Import and uncompress the -grams from GitHub *)
 mono = Uncompress[Import["https://raw.githubusercontent.com/Sloth186/CryptographyProject/refs/heads/main/monoFreqAlpha.txt"]];
 bi = Uncompress[Import["https://raw.githubusercontent.com/Sloth186/CryptographyProject/refs/heads/main/biFreqAlpha.txt"]];
 tri = Uncompress[Import["https://raw.githubusercontent.com/Sloth186/CryptographyProject/refs/heads/main/triFreqAlpha.txt"]];
 tetra = Uncompress[Import["https://raw.githubusercontent.com/Sloth186/CryptographyProject/refs/heads/main/tetraFreqAlpha.txt"]];
 
 
-fourgrams = Sort[AssociateTo[tetra, AssociateTo[tri, AssociateTo[bi, mono]]], Greater]
+(* Join monograms, bigrams, trigrams, and tetragrams together, in descending order of frequency *)
+fourgrams = Sort[AssociateTo[tetra, AssociateTo[tri, AssociateTo[bi, mono]]], Greater];
+
+
+(* For fun - visualize top 50 -grams *)
+BarChart[Take[fourgrams, 50], ChartLabels->StringJoin/@Take[Keys[fourgrams], 50], Frame->True, FrameLabel->{"Top 50 fourgrams"}]
