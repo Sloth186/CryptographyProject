@@ -1,21 +1,22 @@
 (* ::Package:: *)
 
-(* Gutenberg URL numbers for each book *)
-books = {84, 2701, 1342, 1513, 11, 26184, 64317, 2542, 844, 100, 145, 174, 2641, 37106, 43, 11};
+books = {3, 11, 43, 45, 76, 84, 98, 100, 145, 158, 174, 219,
+345, 394, 408, 768, 844, 1080, 1184, 1232, 1259, 1260, 1342, 1400,
+1513, 1661, 1952, 1998, 2000, 2160, 2542, 2554, 2591, 2600, 2641, 2701,
+3207, 4085, 4300, 4363, 5197, 5200, 6593, 6761, 16389, 25344, 26184, 28054,
+37106, 41445, 64317, 67979};
 
 
 (* Extracts raw text for each book from Gutenberg *)
-text = {};
-Do[
-	(* Reduces all characters to lowercase and splits the extracted text into individual words, dropping punctuation *)
-	(* Joins the resulting list to previously obtained text *)
-	text = Join[text
-		, StringSplit[
-			ToLowerCase[Import[URL["https://www.gutenberg.org/cache/epub/" <> i <> "/pg" <> i <> ".txt"]]]
-			, RegularExpression["\\W+"]]]
-, {i, ToString /@ books}]
-numWords = Length[text];
-numChars = Plus @@ StringLength /@ text;
+ text = {};
+ Do[
+ 	(* Grab book text from Project Gutenberg and lowercase everything *)
+ 	bookText = ToLowerCase[Import[URL["https://www.gutenberg.org/cache/epub/" <> i <> "/pg" <> i <> ".txt"]]];
+ 	(* Split the text into words and add to existing list of text *)
+ 	text = Join[text, StringSplit[bookText, RegularExpression["[^a-z]+"]]]
+ , {i, ToString /@ books}]
+ numWords = Length[text];
+ numChars = Plus @@ StringLength /@ text;
 
 
 text
@@ -30,7 +31,7 @@ monoFreqAlpha = KeySelect[monoFreqAll, !MemberQ[LetterNumber[#], 0]&];
 
 
 (* Bar chart to visualize monogram frequencies *)
-BarChart[monoFreqAlpha, ChartLabels->Keys[monoFreqAlpha]]
+BarChart[monoFreqAlpha, ChartLabels->StringJoin /@ Keys[monoFreqAlpha]]
 
 
 (* Convert each word in the text to a list of characters *)
@@ -97,7 +98,7 @@ tetra = Uncompress[Import["https://raw.githubusercontent.com/Sloth186/Cryptograp
 
 
 (* Join monograms, bigrams, trigrams, and tetragrams together, in descending order of frequency *)
-fourgrams = Sort[AssociateTo[tetra, AssociateTo[tri, AssociateTo[bi, mono]]], Greater];
+fourgrams = Sort[AssociateTo[tetra, AssociateTo[tri, AssociateTo[bi, mono]]], Greater]
 
 
 (* For fun - visualize top 50 -grams *)
@@ -108,7 +109,7 @@ Fitness[text_, freq_] := Module[
 {T = Flatten[If[Length[#] < 4, {#}, Subsequences[#, {4}]]& /@ Characters[StringSplit[ToLowerCase[text], RegularExpression["\\W+"]]], 1]
 , result = 0, i},
 	Do[
-		If[freq[i] == 0,
+		If[!KeyExistsQ[freq, i] || freq[i] == 0,
 			result -= 15,
 			result += Log[freq[i]]]
 	, {i, T}];
@@ -116,5 +117,4 @@ Fitness[text_, freq_] := Module[
 ]
 
 
-text = "There's no time to waste, in this famous goodbye. There's angels landing on the shore, so lay down with me. Let the river run dry, it's Sunday in this six day war. Smile darling, don't be sad. Stars are going to shine tonight, tell me where the good men go, before I wash away. Walk me down the old brick road, so I can die where I met you. Hold me like we're going home, turn your tears to rain. Bury me beautiful. Heaven knows, how I loved you.";
-Fitness[text, fourgrams]
+Fitness["", fourgrams]
