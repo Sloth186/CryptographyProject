@@ -40,7 +40,7 @@ Period[text_] := Module[{cleaned, length, ioc, found, period},
 
 	ioc = 0;
 	period = 0;
-	While[ioc <= 1.6 && period < Floor[length / 2],
+	While[ioc <= 1.7 && period < Floor[length / 2],
 		period++;
 		slices = Slice[cleaned, period];
 		sum = 0;
