@@ -7,6 +7,11 @@ Import["https://raw.githubusercontent.com/Sloth186/CryptographyProject/refs/head
 BruteForce[ciphertext_] := Module[{keylength, plaintext, possiblekeys = <||>},
 	keylength = Period[ciphertext];
 	
+	If[keylength > 3,
+		If[ChoiceDialog[
+"The period of this text is calculated to be greater than 3. This will result in brute force taking a significant amount of time to run. Are you sure you want to continue?",
+			{"Yes" -> 1, "Cancel" -> 2}] == 2, Return["Canceled"]]];
+	
 	possiblekeys = BruteForceHelper[ciphertext, "", keylength];
 	
 	KeyMap[ToUpperCase, Sort[possiblekeys, Greater]][[;;UpTo[10]]]
@@ -37,6 +42,9 @@ But, in a larger sense, we can not dedicate\[LongDash]we can not consecrate\[Lon
 cipherText = VigenereCipher[messageText, "largeisthepotofgold"]
 
 
+BruteForce[cipherText]
+
+
 Do[
 	key = StringJoin[RandomChoice[Alphabet[], RandomInteger[{10,50}]]];
 	len = StringLength[key];
@@ -60,3 +68,4 @@ Do[
 
 
 
+option = ChoiceDialog["Are you sure?", {"Yes" -> 1, "Cancel" -> 2}]
