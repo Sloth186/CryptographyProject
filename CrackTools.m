@@ -33,7 +33,7 @@ Slice[list_, n_] := Module[{sliced = Table[{}, n], length = Length[list]},
 ]
 
 
-(* Measures the likelihood that any two characters of a text are the same *)
+(* Calculates what must have been the length of the key used to encrypt a piece of text through the Vigenere cipher *)
 Period[text_] := Module[{cleaned, length, ioc, found, period},
 	cleaned = Characters[StringReplace[ToLowerCase[text], RegularExpression["[^a-z]"] -> ""]];
 	length = Length[cleaned];
@@ -44,6 +44,8 @@ Period[text_] := Module[{cleaned, length, ioc, found, period},
 		period++;
 		slices = Slice[cleaned, period];
 		sum = 0;
+		(* Calculates the index of coincidence for each sliced group, which 
+		measures the likelihood that any two characters of a text are the same *)
 		Do[sum += 26 * Sum[j * (j - 1), {j, Values[Counts[i]]}] / (Length[i] * (Length[i] - 1))
 		, {i, slices}];
 		ioc = sum / period;
