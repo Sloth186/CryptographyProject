@@ -53,3 +53,13 @@ Period[text_] := Module[{cleaned, length, ioc, found, period},
 	
 	period
 ]
+
+
+timings = <||>;
+Do[
+	text = StringJoin[Table[RandomChoice[Alphabet[]], l]];
+	AppendTo[timings, l -> Timing[Fitness[text]][[1]]]
+, {l, 1, 100000, 100}]
+
+
+ListPlot[timings]
